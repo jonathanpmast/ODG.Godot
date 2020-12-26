@@ -1,24 +1,5 @@
 ﻿<Project Sdk="Godot.NET.Sdk/3.2.3">
   <PropertyGroup>
-    <ProjectGuid>{F770FB31-C985-4576-A8FF-BBFFE34B9436}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <RootNamespace>Odg.Godot</RootNamespace>
-    <AssemblyName>Odg.Godot</AssemblyName>
-    <GodotProjectGeneratorVersion>1.0.0.0</GodotProjectGeneratorVersion>
     <TargetFramework>net472</TargetFramework>
-    <!--The following properties were overriden during migration to prevent errors.
-    Enabling them may require other manual changes to the project and its files.-->
-    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <Deterministic>false</Deterministic>
   </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Scenes\Player\Player.cs" />
-    <Compile Include="Source\new_script.cs" />
-    <Compile Include="Source\Player.cs" />
-  </ItemGroup>
 </Project>
