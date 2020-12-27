@@ -1,54 +1,84 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public class Player : KinematicBody2D
 {
     [Export] public int speed = 200;
 
-    public Vector2 _velocity = new Vector2();    
+    [Signal]
+    delegate void Shoot(Vector2 direction, Vector2 location);
+
+    public Vector2 _velocity = new Vector2();
+    private Vector2 _direction = new Vector2();
+    private Vector2 _facingDirection = new Vector2();
+    private Vector2 _shootFromPosition = new Vector2();
     private AnimatedSprite _animatedSprite;
+    private Dictionary<string, Node2D> _offsetNodes = new Dictionary<string, Node2D>();
+
+    private bool _isFiring = false;
     public override void _Ready()
     {
         _animatedSprite = GetNode<AnimatedSprite>("AnimatedSprite");
+        _offsetNodes.Add("up", GetNode<Node2D>("FireOffsets/Up"));
+        _offsetNodes.Add("down", GetNode<Node2D>("FireOffsets/Down"));
+        _offsetNodes.Add("right", GetNode<Node2D>("FireOffsets/Right"));
+        _offsetNodes.Add("left",GetNode<Node2D>("FireOffsets/Left"));
     }
 
     public void GetInput()
     {
-        _velocity = new Vector2();
+        _direction = new Vector2();
 
         if (Input.IsActionPressed("right"))
         {
-            _velocity.x += 1;
+            _direction.x += 1;
         }
         else if (Input.IsActionPressed("left"))
         {
-            _velocity.x -= 1;            
+            _direction.x -= 1;            
         }
 
         if (Input.IsActionPressed("down"))
         {
-            _velocity.y += 1;
+            _direction.y += 1;
         }
         else if (Input.IsActionPressed("up"))
         {
-            _velocity.y -= 1;            
+            _direction.y -= 1;            
         }
-        _velocity = _velocity.Normalized() * speed;
+        _velocity = _direction.Normalized() * speed;
     }
 
     private void Animate()
     {
         string animation = "";
-        if (_velocity.x > 0)
+        if (_direction.x > 0)
+        {
             animation = "w_right";
-        else if (_velocity.x < 0)
+            _facingDirection = new Vector2(1, 0);
+            _shootFromPosition = ToGlobal(_offsetNodes["right"].Position);
+        }
+        else if (_direction.x < 0)
+        {
             animation = "w_left";
-        if (_velocity.y > 0)
+            _facingDirection = new Vector2(-1, 0);
+            _shootFromPosition = ToGlobal(_offsetNodes["left"].Position);
+        }
+        if (_direction.y > 0)
+        {
             animation = "w_down";
-        else if (_velocity.y < 0)
+            _facingDirection = new Vector2(0, 1);
+            _shootFromPosition = ToGlobal(_offsetNodes["down"].Position);
+        }
+        else if (_direction.y < 0)
+        {
+            _facingDirection = new Vector2(0, -1);
             animation = "w_up";
+            _shootFromPosition = ToGlobal(_offsetNodes["up"].Position);
+        }
 
-        if (_velocity == Vector2.Zero)
+        if (_direction == Vector2.Zero)
             _animatedSprite.Stop();
         else if (!_animatedSprite.IsPlaying() ||
                  _animatedSprite.Animation != animation)
@@ -56,9 +86,16 @@ public class Player : KinematicBody2D
 
     }
 
+    private void Fire()
+    {
+        if (Input.IsActionJustPressed("Fire"))
+            EmitSignal(nameof(Shoot), _facingDirection, _shootFromPosition);
+    }
+
     public override void _Process(float delta)
     {
         GetInput();
+        Fire();
     }
 
     public override void _PhysicsProcess(float delta)

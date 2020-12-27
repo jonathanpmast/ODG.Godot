@@ -1,10 +1,28 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://art/game_background.png" type="Texture" id=1]
 [ext_resource path="res://font.tres" type="DynamicFont" id=2]
 [ext_resource path="res://Scenes/Player/Player.tscn" type="PackedScene" id=3]
 [ext_resource path="res://art/fanatiguy.png" type="Texture" id=4]
 [ext_resource path="res://art/dartSS.png" type="Texture" id=5]
+[ext_resource path="res://Source/Bullets.cs" type="Script" id=6]
+[ext_resource path="res://Scenes/Dart/Dart.tscn" type="PackedScene" id=7]
+
+[sub_resource type="SegmentShape2D" id=1]
+a = Vector2( -174.696, -211.546 )
+b = Vector2( -174.026, 152.67 )
+
+[sub_resource type="SegmentShape2D" id=2]
+a = Vector2( -311.43, -225.9 )
+b = Vector2( 612.986, -225.404 )
+
+[sub_resource type="SegmentShape2D" id=3]
+a = Vector2( 612.759, 140.203 )
+b = Vector2( 612.576, -225.72 )
+
+[sub_resource type="SegmentShape2D" id=4]
+a = Vector2( 612.853, 139.289 )
+b = Vector2( -311.029, 139.071 )
 
 [node name="Root" type="Node"]
 
@@ -100,6 +118,64 @@ position = Vector2( 0, 22 )
 texture = ExtResource( 1 )
 centered = false
 
-[node name="Player" parent="Background" instance=ExtResource( 3 )]
+[node name="Player" parent="." instance=ExtResource( 3 )]
 position = Vector2( 475.176, 244.659 )
 scale = Vector2( 1, 1 )
+z_index = 1
+
+[node name="Bullets" type="Node2D" parent="."]
+scale = Vector2( 0.996943, 1 )
+z_index = 1
+script = ExtResource( 6 )
+DartScene = ExtResource( 7 )
+
+[node name="DartWalls" type="Node2D" parent="."]
+
+[node name="Left" type="StaticBody2D" parent="DartWalls"]
+collision_layer = 8
+collision_mask = 2
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DartWalls/Left"]
+position = Vector2( 192.415, 250.557 )
+z_index = 2
+shape = SubResource( 1 )
+
+[node name="Top" type="StaticBody2D" parent="DartWalls"]
+collision_layer = 8
+collision_mask = 2
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DartWalls/Top"]
+position = Vector2( 329.116, 265.047 )
+z_index = 2
+shape = SubResource( 2 )
+
+[node name="Right" type="StaticBody2D" parent="DartWalls"]
+collision_layer = 8
+collision_mask = 2
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DartWalls/Right"]
+position = Vector2( 329.116, 265.047 )
+z_index = 2
+shape = SubResource( 3 )
+
+[node name="Bottom" type="StaticBody2D" parent="DartWalls"]
+collision_layer = 8
+collision_mask = 2
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DartWalls/Bottom"]
+position = Vector2( 329.116, 265.047 )
+z_index = 2
+shape = SubResource( 4 )
+[connection signal="Shoot" from="Player" to="Bullets" method="_on_Player_Shoot"]

@@ -8,15 +8,55 @@ extents = Vector2( 10.4445, 22.8145 )
 
 [node name="Player" type="KinematicBody2D"]
 scale = Vector2( 0.8, 0.8 )
+collision_mask = 2147483668
 script = ExtResource( 2 )
+__meta__ = {
+"_edit_lock_": true,
+"_edit_vertical_guides_": [ 13.8349 ]
+}
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 scale = Vector2( 1, 1 )
 frames = ExtResource( 1 )
-animation = "w_right"
-frame = 4
+animation = "w_left"
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( -1.41942, 2.53553 )
+scale = Vector2( 1.00309, 1 )
 z_index = 1
 shape = SubResource( 1 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="FireOffsets" type="Node" parent="."]
+
+[node name="Up" type="Node2D" parent="FireOffsets"]
+position = Vector2( -11.8044, -12.8067 )
+scale = Vector2( 76.9783, 14.6299 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Right" type="Node2D" parent="FireOffsets"]
+position = Vector2( 14, 6 )
+scale = Vector2( 0.8, 0.8 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Left" type="Node2D" parent="FireOffsets"]
+position = Vector2( -12.918, 2.6727 )
+scale = Vector2( 0.8, 0.8 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Down" type="Node2D" parent="FireOffsets"]
+position = Vector2( 10.9135, 16.3703 )
+scale = Vector2( 0.8, 0.8 )
+__meta__ = {
+"_edit_lock_": true
+}
